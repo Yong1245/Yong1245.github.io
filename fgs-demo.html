@@ -3,7 +3,7 @@
 <meta name="robots" content="noindex"><title>Goals&amp;Timers — foreground service demonstration</title>
 <style>body{font:17px/1.6 system-ui,sans-serif;background:#f4f7f5;color:#173225;max-width:850px;margin:40px auto;padding:0 20px}h1{line-height:1.2}video{display:block;width:100%;max-width:390px;margin:24px auto;background:#202632;border-radius:12px}section{background:white;padding:22px;border-radius:16px;margin:20px 0}a{color:#176c39}code{overflow-wrap:anywhere}small{color:#42564a}</style>
 <h1>Goals&amp;Timers<br>Foreground service demonstration</h1>
-<p>Google Play build <strong>0.1.4 (5)</strong> · Android 16 / API 36 emulator · 18 September 2026.</p>
+<p>Build <strong>0.1.4 (5)</strong> · Android 16 / API 36 emulators · 18 September 2026. Timer: Google Play installation. Scheduled alarm: locally installed release APK from the same source.</p>
 <section><h2>Local alarm audio playback</h2>
 <p>A user creates a one-minute timer in Sound mode and starts it. The app moves to the home screen. When the timer becomes due, <code>AlarmRingingService</code> starts a <code>mediaPlayback</code> foreground service. Its notification offers Dismiss and Snooze controls. Dismiss stops playback and the service.</p>
 <video controls playsinline preload="metadata" aria-label="Timer foreground service demonstration"><source src="timer-foreground-service-0.1.4-final.mp4" type="video/mp4">Your browser cannot play this video. Use the download link below.</video>
@@ -14,7 +14,21 @@
 <li>Android audio service recorded MediaPlayer start: 10:08:58.771 UTC (808 ms after the scheduled time).</li>
 <li>At 10:09:19 UTC, the service was foreground, type <code>mediaPlayback</code>, with alarm audio focus and a started MediaPlayer.</li>
 <li>Dismiss: Android recorded player stopped at 10:11:03.463 UTC and released at 10:11:03.467 UTC. The app service list was then empty.</li>
-</ul><p>These timestamps describe this demonstration only. They do not prove all past intermittent delays are resolved. Scheduled alarms use the same playback service but are not separately demonstrated in this recording.</p></section>
+</ul><p>These timestamps describe this demonstration only. They do not prove all past intermittent delays are resolved.</p></section>
+<section><h2>Scheduled alarm — same playback service</h2>
+<p>The separate QA emulator uses the release APK from the same source. An existing test alarm is edited to 10:46 AM, saved in Sound mode and enabled. Playback continues after the user returns to the home screen. The foreground notification exposes Snooze and Dismiss alarm.</p>
+<h3>1. Schedule and activation</h3>
+<video controls playsinline preload="metadata" aria-label="Scheduled alarm setup and activation"><source src="alarm-schedule-0.1.4.mp4" type="video/mp4"></video>
+<p><a href="alarm-schedule-0.1.4.mp4">Open schedule and activation video</a></p>
+<h3>2. Dismiss the same alarm</h3>
+<p><strong>Recording gap:</strong> the first recording reached Android's three-minute limit. The second clip resumes the same ringing event at 10:47:28 UTC. It is not a continuous recording. Both clips are silent actual screen recordings.</p>
+<video controls playsinline preload="metadata" aria-label="Scheduled alarm dismissal"><source src="alarm-dismiss-0.1.4.mp4" type="video/mp4"></video>
+<p><a href="alarm-dismiss-0.1.4.mp4">Open dismissal video</a></p>
+<ul><li>AlarmManager reservation: 10:46:00.000 UTC, one-shot alarm clock.</li>
+<li>Audio focus request: 10:46:00.096 UTC. MediaPlayer started at 10:46:00.239 UTC (239 ms after the scheduled time).</li>
+<li>Dismiss stopped the player at 10:47:45.395 UTC and released it at 10:47:45.417 UTC. AlarmRingingService was absent afterward; the unrelated SDK WebView service remained.</li></ul>
+<p>The home gesture occurred near the due time; Android recorded service creation while the app was still in TOP state. This clip demonstrates scheduling and continued playback after leaving the app. It does not establish a cold background or long-idle start, and it does not verify audible speaker output.</p>
+<p>QA release APK SHA-256:<br><small><code>82c2b4060598d4cdb6908eb63f36989ff7b30eb39255e187afa5ce0af51e8c51</code></small></p></section>
 <section><h2>Build identity</h2><p>Package: <code>com.yonyu.goaltime</code><br>Installed from Google Play internal testing.</p>
 <p>Play base APK SHA-256:<br><small><code>cc1b6a571560917a0ccdc47ff8edc038675f405b517d5539dcf96930b61031d0</code></small></p>
 <p>AAB SHA-256:<br><small><code>7f9e9aa36eecb6ddc8ea0529679995ed940d56ad6c493e7794f8fdf86e7f1dc3</code></small></p></section>
